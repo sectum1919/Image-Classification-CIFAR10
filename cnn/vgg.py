@@ -1,4 +1,3 @@
-from distutils.errors import LibError
 import torch
 from torch import nn
 import math
@@ -57,7 +56,7 @@ def vgg19():
 class VGG(nn.Module):
     def __init__(self):
         super(VGG, self).__init__()
-        self.vgg = vgg11()
+        self.vgg = vgg19()
         self.linear = nn.Sequential(
             nn.Dropout(),
             nn.Linear(in_features=512, out_features=512),
