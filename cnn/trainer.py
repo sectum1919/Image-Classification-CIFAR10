@@ -1,7 +1,7 @@
 import torch
 import torch.functional as F
 import numpy as np
-
+import time
 
 def train(
     model,
@@ -19,11 +19,13 @@ def train(
     valid_loss = []
     valid_acc = []
     for epoch in range(max_epoch):
+        epoch_st = time.time()
         tmp_train_loss = []
         tmp_valid_loss = []
         valid_logits = []
         valid_labels = []
         for iter, batch in enumerate(train_loader):
+            iter_st = time.time()
             loss, logits = train_step(
                 model,
                 criterion,
@@ -33,9 +35,9 @@ def train(
             )
             tmp_train_loss.append(loss)
             if iter % print_per_iter == 0:
-                print("train iter[", iter, "]|epoch[", epoch, "] loss:", loss)
+                print("train iter[{:3d}] | epoch[{:3d}] loss:{:.6f} time:{:.6f}".format(iter,epoch,loss,time.time()-iter_st))
         train_loss.append(np.mean(tmp_train_loss))
-        print("train epoch[", epoch, "] avg.loss:", train_loss[-1])
+        print("train epoch[{:3d}] avg.loss:{:.6f} time:{:.6f}".format(epoch, train_loss[-1], time.time()-epoch_st))
 
         if valid_loader is not None:
             for iter, batch in enumerate(valid_loader):
@@ -50,8 +52,8 @@ def train(
                 tmp_valid_loss.append(loss)
             valid_loss.append(np.mean(tmp_valid_loss))
             valid_acc.append(acc(valid_logits, valid_labels))
-            print("valid epoch[", epoch, "] avg.loss:", valid_loss[-1], "acc:", valid_acc[-1])
-            torch.save(model, "./checkpoints/"+str(epoch)+".pt")
+            print("valid epoch[{:3d}] avg.loss:{:.6f}  acc:{:.2%}\n".format(epoch, loss, valid_acc[-1]))
+            # torch.save(model, "./checkpoints/"+str(epoch)+".pt")
 
     if test_loader is not None:
         tmp_test_loss = []

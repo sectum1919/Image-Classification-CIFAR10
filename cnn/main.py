@@ -21,7 +21,7 @@ def test_resnet():
     criterion = criterion.cuda()
     optimizer = optim.SGD(model.parameters(), lr=0.1, weight_decay=1e-4, momentum=0.9)
     batch_size = 256
-    max_epoch = 100
+    max_epoch = 200
     print_per_iter = 50
     trainset, trainloader, testset, testloader, classes = load_cifar10(batch_size)
 

@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 
 def load_cifar10(batch_size=64):
-    transform = transforms.Compose(
+    train_transform = transforms.Compose(
         [
             transforms.RandomHorizontalFlip(),
             transforms.RandomCrop(32, 4),
@@ -16,7 +16,7 @@ def load_cifar10(batch_size=64):
         ]
     )
 
-    transform1 = transforms.Compose(
+    test_transform = transforms.Compose(
         [
             transforms.ToTensor(), 
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -27,20 +27,20 @@ def load_cifar10(batch_size=64):
         root="/work9/cchen/project/study/ai/data",
         train=True,
         download=True,
-        transform=transform,
+        transform=train_transform,
     )
     trainloader = torch.utils.data.DataLoader(
-        trainset, batch_size=batch_size, shuffle=True, num_workers=8
+        trainset, batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True,
     )
 
     testset = torchvision.datasets.CIFAR10(
         root="/work9/cchen/project/study/ai/data",
         train=False,
         download=True,
-        transform=transform1,
+        transform=test_transform,
     )
     testloader = torch.utils.data.DataLoader(
-        testset, batch_size=batch_size, shuffle=False, num_workers=8
+        testset, batch_size=batch_size, shuffle=False, num_workers=8, pin_memory=True,
     )
 
     classes = (
