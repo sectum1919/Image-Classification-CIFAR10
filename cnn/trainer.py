@@ -53,7 +53,7 @@ def train(
             valid_loss.append(np.mean(tmp_valid_loss))
             valid_acc.append(acc(valid_logits, valid_labels))
             print("valid epoch[{:3d}] avg.loss:{:.6f}  acc:{:.2%}\n".format(epoch, loss, valid_acc[-1]))
-            # torch.save(model, "./checkpoints/"+str(epoch)+".pt")
+            torch.save(model, "./checkpoints/"+str(epoch)+".pt")
 
     if test_loader is not None:
         tmp_test_loss = []
