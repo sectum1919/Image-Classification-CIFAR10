@@ -54,9 +54,18 @@ def vgg19():
     return nn.Sequential(*layers)
 
 class VGG(nn.Module):
-    def __init__(self):
+    def __init__(self, name='vgg19'):
         super(VGG, self).__init__()
-        self.vgg = vgg19()
+        vgg_models = {
+            "vgg11": vgg11,
+            "vgg13": vgg13,
+            "vgg16": vgg16,
+            "vgg19": vgg19,
+        }
+        if name in vgg_models:
+            self.vgg = vgg_models[str(name)]()
+        else:
+            self.vgg = vgg19()
         self.linear = nn.Sequential(
             nn.Dropout(),
             nn.Linear(in_features=512, out_features=512),

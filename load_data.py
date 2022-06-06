@@ -58,6 +58,23 @@ def load_cifar10(batch_size=64):
 
     return trainset, trainloader, testset, testloader, classes
 
+def load_cifar10_origin(batch_size=64):
+    origin_transform = transforms.Compose(
+        [
+            transforms.ToTensor(), 
+        ]
+    )
+    originset = torchvision.datasets.CIFAR10(
+        root="/work9/cchen/project/study/ai/data",
+        train=False,
+        download=True,
+        transform=origin_transform,
+    )
+    originloader = torch.utils.data.DataLoader(
+        originset, batch_size=batch_size, shuffle=False, num_workers=8, pin_memory=True,
+    )
+    return originset, originloader
+
 
 def extract_hog(data_list):
     print("extracting hog features")

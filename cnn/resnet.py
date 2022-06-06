@@ -71,17 +71,17 @@ class ResNet34(nn.Module):
         super().__init__()
 
         self.feature = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=2),
+            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
+            # nn.MaxPool2d(kernel_size=3, stride=2),
 
             StackedBasiclBlock(64, 64, 3),
             StackedBasiclBlock(64, 128, 4),
             StackedBasiclBlock(128, 256, 6),
             StackedBasiclBlock(256, 512, 3),
 
-            nn.AvgPool2d(1, 1)
+            nn.AvgPool2d(kernel_size=4)
         )
         
         self.fc = nn.Linear(512, 10)
@@ -143,7 +143,7 @@ class ResNet50(nn.Module):
             nn.Conv2d(3, 64, 7, 2),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(3, 2),
+            # nn.MaxPool2d(3, 2),
             
             StackedBottleneckBlock(64, 64, 3),
             StackedBottleneckBlock(256, 128, 4),
@@ -166,7 +166,7 @@ class ResNet101(nn.Module):
             nn.Conv2d(3, 64, 7, 2),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(3, 2),
+            # nn.MaxPool2d(3, 2),
             
             StackedBottleneckBlock(64, 64, 3),
             StackedBottleneckBlock(256, 128, 4),
@@ -189,7 +189,7 @@ class ResNet152(nn.Module):
             nn.Conv2d(3, 64, 7, 2),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(3, 2),
+            # nn.MaxPool2d(3, 2),
             
             StackedBottleneckBlock(64, 64, 3),
             StackedBottleneckBlock(256, 128, 8),

@@ -16,14 +16,14 @@ from load_data import load_cifar10
 
 
 def test_resnet():
-    model = ResNet18()
+    model = ResNet50()
     model.cuda()
     criterion = nn.CrossEntropyLoss()
     criterion = criterion.cuda()
     # optimizer = optim.Adam(model.parameters(), lr=1e-4)
     optimizer = optim.SGD(model.parameters(), lr=0.1, weight_decay=1e-4, momentum=0.9)
     batch_size = 128
-    max_epoch = 200
+    max_epoch = 150
     print_per_iter = 50
     trainset, trainloader, testset, testloader, classes = load_cifar10(batch_size)
 
@@ -32,6 +32,7 @@ def test_resnet():
         criterion=criterion,
         optimizer=optimizer,
         batch_size=batch_size,
+        work_path='/work9/cchen/project/study/ai/workpath/ResNet50',
         max_epoch=max_epoch,
         print_per_iter=print_per_iter,
         train_loader=trainloader,
@@ -59,6 +60,7 @@ def test_vgg():
         criterion=criterion,
         optimizer=optimizer,
         batch_size=batch_size,
+        work_path='/work9/cchen/project/study/ai/workpath/vgg',
         max_epoch=max_epoch,
         print_per_iter=print_per_iter,
         train_loader=trainloader,
@@ -87,6 +89,7 @@ def test_seresnet():
         criterion=criterion,
         optimizer=optimizer,
         batch_size=batch_size,
+        work_path='/work9/cchen/project/study/ai/workpath/SEResNet50',
         max_epoch=max_epoch,
         print_per_iter=print_per_iter,
         train_loader=trainloader,
