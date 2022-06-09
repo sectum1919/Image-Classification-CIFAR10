@@ -2,6 +2,14 @@ import torch
 import torch.functional as F
 import numpy as np
 import time
+import os
+import shutil
+
+def remake_dir(out_dirPath):
+    if os.path.exists(out_dirPath):
+        shutil.rmtree(out_dirPath)
+        print(f"have remaken {out_dirPath}")
+    os.makedirs(out_dirPath)
 
 def train(
     model,
@@ -18,6 +26,14 @@ def train(
     train_loss = []
     valid_loss = []
     valid_acc = []
+
+    train_number = 5
+    ans_epoch = 0
+    ans_loss = 0
+    ans_acc = 0
+
+    remake_dir(f"./checkpoints{train_number}")
+
     for epoch in range(max_epoch):
         epoch_st = time.time()
         tmp_train_loss = []
@@ -53,7 +69,12 @@ def train(
             valid_loss.append(np.mean(tmp_valid_loss))
             valid_acc.append(acc(valid_logits, valid_labels))
             print("valid epoch[{:3d}] avg.loss:{:.6f}  acc:{:.2%}\n".format(epoch, loss, valid_acc[-1]))
-            torch.save(model, "./checkpoints/"+str(epoch)+".pt")
+            torch.save(model, f"./checkpoints{train_number}/"+str(epoch)+".pt")
+            if valid_acc[-1] > ans_acc:
+                ans_epoch = epoch
+                ans_loss = loss
+                ans_acc = valid_acc[-1]
+
 
     if test_loader is not None:
         tmp_test_loss = []
@@ -72,6 +93,7 @@ def train(
         test_loss = np.mean(tmp_test_loss)
         print("test loss:", test_loss, "acc:", acc(test_logits, test_labels))
 
+    print(f"the best model is in epoch{ans_epoch}, loss is {ans_loss}, acc is {ans_acc}")
     return train_loss, valid_loss, test_loss
 
 

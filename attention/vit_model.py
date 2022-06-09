@@ -5,7 +5,7 @@ import torch.nn as nn
 
 class PatchEmbed(nn.Module):
     # 图片切块
-    def __init__(self, img_size=32, patch_size=4, in_c=3, embed_dim=48):
+    def __init__(self, img_size=32, patch_size=8, in_c=3, embed_dim=192):
         super().__init__()
         img_size = (img_size, img_size)
         patch_size = (patch_size, patch_size)
@@ -29,8 +29,8 @@ class Attention(nn.Module):
                  dim, # token的dimension
                  num_heads=4, # 头的个数
                  qkv_bias=False,
-                 attn_drop_ratio=0.5,
-                 proj_drop_ratio=0.5):
+                 attn_drop_ratio=0.,
+                 proj_drop_ratio=0.):
         super(Attention, self).__init__()
         self.num_heads = num_heads
         head_dim = dim // num_heads
@@ -57,7 +57,7 @@ class Attention(nn.Module):
         return x
 
 class Mlp(nn.Module):
-    def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.5):
+    def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.):
         super().__init__()
         out_features = out_features or in_features
         hidden_features = hidden_features or in_features
@@ -80,8 +80,8 @@ class Block(nn.Module):
                  num_heads,
                  mlp_ratio=4.,
                  qkv_bias=False,
-                 drop_ratio=0.5,
-                 attn_drop_ratio=0.5,
+                 drop_ratio=0.,
+                 attn_drop_ratio=0.,
                  act_layer=nn.GELU,
                  norm_layer=nn.LayerNorm):
         super(Block, self).__init__()
@@ -102,7 +102,7 @@ class Block(nn.Module):
 class VisionTransformer(nn.Module):
     def __init__(self, img_size=32, patch_size=4, in_c=3, num_classes=10,
                  embed_dim=48, depth=12, num_heads=4, mlp_ratio=4.0, qkv_bias=True,
-                 drop_ratio=0.5,attn_drop_ratio=0.5, embed_layer=PatchEmbed):
+                 drop_ratio=0.,attn_drop_ratio=0., embed_layer=PatchEmbed):
                 
         super(VisionTransformer, self).__init__()
         self.num_classes = num_classes
@@ -162,11 +162,11 @@ def _init_vit_weights(m):
         nn.init.zeros_(m.bias)
         nn.init.ones_(m.weight)
 
-def vit_patch(patch_size):
+def vit_patch(patch_size, depth, num_heads):
     model = VisionTransformer(img_size=32,
-                              patch_size=4,
+                              patch_size=patch_size,
                               embed_dim=patch_size * patch_size * 3,
-                              depth=12,
-                              num_heads=4,
+                              depth = depth,
+                              num_heads = num_heads,
                               num_classes=10)
     return model

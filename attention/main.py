@@ -13,8 +13,8 @@ from trainer import train
 from load_data import load_cifar10
 
 
-def test_resnet(patch_size):
-    model = vit_patch(patch_size)
+def test_ViT(patch_size, depth, num_heads):
+    model = vit_patch(patch_size, depth, num_heads)
     model.cuda()
     criterion = nn.CrossEntropyLoss()
     criterion = criterion.cuda()
@@ -42,4 +42,4 @@ def test_resnet(patch_size):
 
 # test_seresnet()
 # test_vgg()
-test_resnet(4)
+test_ViT(patch_size = 4, depth = 12, num_heads = 4)
