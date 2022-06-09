@@ -7,7 +7,7 @@ from load_data import load_cifar10, extract_hog
 
 trainset, _, testset, _, classes = load_cifar10()
 
-classifier = svm.SVC(C=0.1, gamma=1e-7, decision_function_shape="ovr", max_iter=30, probability=True)
+classifier = svm.SVC(C=0.1, gamma=1e-7, decision_function_shape="ovr", max_iter=100000, probability=True)
 
 train_data = extract_hog(trainset.data)
 classifier.fit(train_data, trainset.targets)
